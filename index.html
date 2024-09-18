@@ -8,7 +8,6 @@
     <title data-translate="title">Portfolio - Danny Josue</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -17,6 +16,7 @@
                 { name: "HTML", percentage: 100, color: "bg-red-500", es: "HTML", en: "HTML" },
                 { name: "CSS", percentage: 100, color: "bg-blue-500", es: "CSS", en: "CSS" },
                 { name: "PHP", percentage: 90, color: "bg-yellow-500", es: "PHP", en: "PHP" },
+                { name: "Laravel", percentage: 90, color: "bg-purple-500", es: "Laravel", en: "Laravel" },
                 { name: "JavaScript", percentage: 80, color: "bg-green-500", es: "JavaScript", en: "JavaScript" },
                 { name: "MySQL", percentage: 80, color: "bg-purple-500", es: "MySQL", en: "MySQL" },
                 { name: "Photoshop", percentage: 70, color: "bg-pink-500", es: "Photoshop", en: "Photoshop" },
@@ -25,9 +25,26 @@
                 { name: "Resolución de Problemas", percentage: 80, color: "bg-indigo-500", es: "Resolución de Problemas", en: "Problem Solving" }
             ];
 
+            // Projects data
+            const projects = [
+                {
+                    name: { es: "ControlMax ERP", en: "ControlMax ERP" },
+                    description: { es: "Un sistema ERP completo utilizado por la empresa Merik para la gestión y automatización empresarial.", en: "A comprehensive ERP system used by the company Merik for business management and automation." }
+                },
+                {
+                    name: { es: "7 Leguas ERP", en: "7 Leguas ERP" },
+                    description: { es: "Un sistema ERP implementado para la empresa de neumáticos 7 Leguas para optimizar operaciones y control de inventarios.", en: "An ERP system implemented for the tire company 7 Leguas to streamline operations and inventory control." }
+                },
+                {
+                    name: { es: "Legacy Roleplay PCU", en: "Legacy Roleplay PCU" },
+                    description: { es: "Un sistema de gestión de personajes y perfiles para un servidor de rol en SA-MP, que incluye funciones avanzadas para la administración y personalización de personajes.", en: "A character and profile management system for a roleplay server in SA-MP, featuring advanced functions for character administration and customization." }
+                }
+            ];
+
             // Elements
             const languageSwitch = document.getElementById('language-switch');
             const skillsContainer = document.querySelector('.skills-container');
+            const projectsContainer = document.querySelector('#projects .projects-container');
 
             function updateSkills(language) {
                 skillsContainer.innerHTML = '';
@@ -38,7 +55,7 @@
                     skillElement.innerHTML = `
                         <h3 class="text-xl font-semibold text-white mb-2">${skill[language]}</h3>
                         <div>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5 dark:bg-gray-700">
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
                                 <div class="${skill.color} h-2.5 rounded-full" style="width: ${skill.percentage}%"></div>
                             </div>
                             <p class="text-white">${skill.percentage}/100</p>
@@ -48,12 +65,24 @@
                 });
             }
 
+            function updateProjects(language) {
+                projectsContainer.innerHTML = '';
+
+                projects.forEach(project => {
+                    const projectElement = document.createElement('div');
+                    projectElement.classList.add('bg-gray-800', 'p-6', 'rounded-lg', 'shadow-lg', 'text-center');
+                    projectElement.innerHTML = `
+                        <h3 class="text-xl font-semibold text-white mb-2">${project.name[language]}</h3>
+                        <p class="text-gray-400">${project.description[language]}</p>
+                    `;
+                    projectsContainer.appendChild(projectElement);
+                });
+            }
+
             languageSwitch.addEventListener('change', function () {
                 const language = this.value;
                 updateSkills(language);
-                document.querySelectorAll('.language-text').forEach(el => {
-                    el.classList.toggle('hidden', el.dataset.lang !== language);
-                });
+                updateProjects(language);
                 document.querySelectorAll('[data-translate]').forEach(el => {
                     el.innerText = translations[language][el.dataset.translate] || el.innerText;
                 });
@@ -61,12 +90,13 @@
 
             // Initialize with English
             updateSkills('en');
+            updateProjects('en');
         });
 
         const translations = {
             en: {
                 title: "Portfolio - Danny Josue",
-                aboutTitle: "About",
+                aboutTitle: "About me",
                 projectsTitle: "Projects",
                 skillsTitle: "Skills",
                 contactTitle: "Contact",
@@ -101,18 +131,17 @@
 <body class="bg-gray-900 text-gray-300">
     <!-- Header -->
     <header class="bg-gray-800 py-6 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center px-6">
-            <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3616/3616770.png" type="image/png">
-            <h1 class="text-3xl font-bold text-white" data-translate="title">Danny Josue's Portfolio</h1>
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-6">
+            <h1 class="text-3xl font-bold text-white mb-4 md:mb-0" data-translate="title">Danny Josue's Portfolio</h1>
             <nav>
-                <ul class="flex space-x-4 text-gray-400">
+                <ul class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 text-gray-400">
                     <li><a href="#about" class="hover:text-white" data-translate="aboutTitle">About</a></li>
                     <li><a href="#projects" class="hover:text-white" data-translate="projectsTitle">Projects</a></li>
                     <li><a href="#skills" class="hover:text-white" data-translate="skillsTitle">Skills</a></li>
                     <li><a href="#contact" class="hover:text-white" data-translate="contactTitle">Contact</a></li>
                 </ul>
             </nav>
-            <select id="language-switch" class="bg-gray-600 text-white px-3 py-1 rounded ml-4">
+            <select id="language-switch" class="bg-gray-600 text-white px-3 py-1 rounded mt-4 md:mt-0">
                 <option value="en">English</option>
                 <option value="es">Español</option>
             </select>
@@ -122,64 +151,38 @@
     <!-- Main Content -->
     <main class="container mx-auto px-6 py-10">
         <!-- About Section -->
-        <section id="about" class="flex items-center mb-16">
-            <!-- Avatar -->
-            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-700">
-                <img src="https://avatars.githubusercontent.com/u/86510930?v=4" alt="Avatar" class="w-full h-full object-cover">
-            </div>
-            <!-- Info -->
-            <div class="ml-8">
-                <h2 class="text-4xl font-semibold text-white" data-translate="aboutTitle">Danny Josue</h2>
-                <p class="text-xl mt-2" data-translate="aboutDesc">Web Developer & Designer</p>
-                <div class="mt-4">
-                    <a href="https://github.com" class="text-gray-400 hover:text-white mr-4">
-                        <i class="fab fa-github fa-2x"></i>
-                    </a>
-                    <a href="https://twitter.com" class="text-gray-400 hover:text-white">
-                        <i class="fab fa-twitter fa-2x"></i>
-                    </a>
-                </div>
-            </div>
+        <section id="about" class="mb-12">
+            <h2 class="text-3xl font-bold mb-4" data-translate="aboutTitle">About Me</h2>
+            <p class="text-lg" data-translate="aboutDesc">Web Developer & Designer</p>
         </section>
 
         <!-- Projects Section -->
-        <section id="projects">
-            <h2 class="text-3xl font-semibold text-white mb-6" data-translate="projectsTitle">Projects</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                <!-- Project Card 1 -->
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
-                    <h3 class="text-xl font-semibold text-white mb-2" data-translate="controlMax">ControlMax ERP</h3>
-                    <p class="text-gray-400" data-translate="controlMaxDesc">A comprehensive ERP system used by the company Merik for business management and automation.</p>
-                </div>
-                <!-- Project Card 2 -->
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
-                    <h3 class="text-xl font-semibold text-white mb-2" data-translate="sevenLeguas">7 Leguas ERP</h3>
-                    <p class="text-gray-400" data-translate="sevenLeguasDesc">An ERP system implemented for the tire company 7 Leguas to streamline operations and inventory control.</p>
-                </div>
-                <!-- Project Card 3 -->
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
-                    <h3 class="text-xl font-semibold text-white mb-2" data-translate="onixLauncher">Onix Launcher</h3>
-                    <p class="text-gray-400" data-translate="onixLauncherDesc">A custom launcher for managing game files and user accounts with advanced features.</p>
-                </div>
+        <section id="projects" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6" data-translate="projectsTitle">Projects</h2>
+            <div class="projects-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Projects will be injected here -->
             </div>
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="mt-16">
-            <h2 class="text-3xl font-semibold text-white mb-6" data-translate="skillsTitle">Skills</h2>
-            <div class="skills-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        <section id="skills" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6" data-translate="skillsTitle">Skills</h2>
+            <div class="skills-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Skills will be injected here -->
+            </div>
         </section>
 
         <!-- Contact Section -->
         <section id="contact" class="mt-16">
             <h2 class="text-3xl font-semibold text-white mb-6" data-translate="contactTitle">Contact</h2>
-            <p class="text-gray-400" data-translate="contactDesc">Feel free to reach out to me via email or through my social media profiles.</p>
+            <p class="text-gray-400" data-translate="contactDesc">Feel free to reach out to me via email or through my
+                social media profiles.</p>
             <a href="mailto:dannyjp49@gmail.com" class="text-blue-500 hover:underline">dannyjp49@gmail.com</a>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 py-6 mt-16">
+    <footer class="bg-gray-800 py-6">
         <div class="container mx-auto text-center text-gray-400">
             <p>&copy; 2024 Danny Josue Peña Hernandez. All rights reserved.</p>
         </div>
